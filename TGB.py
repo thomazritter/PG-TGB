@@ -4,6 +4,11 @@ import numpy as np
 import PySimpleGUI as sg
 from io import BytesIO
 
+# Trabalho GB - Processamento Gráfico
+# Alunos: Carlos Souza e Thomaz Justo
+# Este script implementa um editor gráfico com funcionalidade de aplicação de filtros,
+# adição de stickers, manipulação de imagens e captura de vídeo inspirado nos stories do Instagram.
+
 # Variáveis Globais
 flipx = False
 flipy = False
@@ -239,7 +244,7 @@ sticker_buttons = [
 ]
 
 layout = [
-    [sg.Text('Editor de Imagens', size=(40, 1), justification='center', font=('Helvetica', 16))],
+    [sg.Text('Editor de Imagens - Carlos & Thomaz', size=(40, 1), justification='center', font=('Helvetica', 16))],
     [sg.Graph(canvas_size=(800, 600), graph_bottom_left=(0, 0), graph_top_right=(800, 600),
               enable_events=True, key='-GRAPH-')],
     [sg.Button('Abrir Imagem', key='-OPEN-', size=(12, 1)), sg.Button('Salvar Imagem', key='-SAVE-', size=(12, 1))],
