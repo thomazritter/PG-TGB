@@ -5,65 +5,51 @@ import PySimpleGUI as sg
 from PIL import ImageGrab
 from io import BytesIO
 
-# FUNCTIONS #
+# Trabalho GB - Processamento Gráfico
+# Alunos: Carlos Souza e Thomaz Justo
+# Este script implementa um editor gráfico com funcionalidade de aplicação de filtros,
+# adição de stickers, manipulação de imagens e captura de vídeo inspirado nos stories do Instagram.
+
+# ---------------------- FUNÇÕES ---------------------- #
 def update_elements():
+    # Captura os botões da interface gráfica
     capture_button = window['-CAPTURE-']
     record_button = window['-RECORD-']
     flipx_button = window['-FLIPX-']
     flipy_button = window['-FLIPY-']
-    filter0_button = window['-FILTER0-']
-    filter1_button = window['-FILTER1-']
-    filter2_button = window['-FILTER2-']
-    filter3_button = window['-FILTER3-']
-    filter4_button = window['-FILTER4-']
-    filter5_button = window['-FILTER5-']
-    filter6_button = window['-FILTER6-']
-    filter7_button = window['-FILTER7-']
-    filter8_button = window['-FILTER8-']
-    filter9_button = window['-FILTER9-']
-    filter10_button = window['-FILTER10-']
-    sticker0_button = window['-STICKER0-']
-    sticker1_button = window['-STICKER1-']
-    sticker2_button = window['-STICKER2-']
-    sticker3_button = window['-STICKER3-']
-    sticker4_button = window['-STICKER4-']
-    sticker5_button = window['-STICKER5-']
-    sticker6_button = window['-STICKER6-']
-    sticker7_button = window['-STICKER7-']
-    sticker8_button = window['-STICKER8-']
-    sticker9_button = window['-STICKER9-']
-    sticker10_button = window['-STICKER10-']
+    filter_buttons = [window[f'-FILTER{i}-'] for i in range(11)]
+    sticker_buttons = [window[f'-STICKER{i}-'] for i in range(11)]
 
+    # Atualiza o estado do botão de captura
     capture_button.update(disabled=not record)
-    record_button.update(button_color='red') if record else record_button.update(button_color='white')
-    flipx_button.update(button_color='gold') if flipx else flipx_button.update(button_color='white')
-    flipy_button.update(button_color='gold') if flipy else flipy_button.update(button_color='white')
-    filter0_button.update(button_color='gold') if current_filter==0 else filter0_button.update(button_color='black')
-    filter1_button.update(button_color='gold') if current_filter==1 else filter1_button.update(button_color='black')
-    filter2_button.update(button_color='gold') if current_filter==2 else filter2_button.update(button_color='black')
-    filter3_button.update(button_color='gold') if current_filter==3 else filter3_button.update(button_color='black')
-    filter4_button.update(button_color='gold') if current_filter==4 else filter4_button.update(button_color='black')
-    filter5_button.update(button_color='gold') if current_filter==5 else filter5_button.update(button_color='black')
-    filter6_button.update(button_color='gold') if current_filter==6 else filter6_button.update(button_color='black')
-    filter7_button.update(button_color='gold') if current_filter==7 else filter7_button.update(button_color='black')
-    filter8_button.update(button_color='gold') if current_filter==8 else filter8_button.update(button_color='black')
-    filter9_button.update(button_color='gold') if current_filter==9 else filter9_button.update(button_color='black')
-    filter10_button.update(button_color='gold') if current_filter==10 else filter10_button.update(button_color='black')
-    sticker0_button.update(button_color='gold') if current_sticker==sticker_image_0 else sticker0_button.update(button_color='black')
-    sticker1_button.update(button_color='gold') if current_sticker==sticker_image_1 else sticker1_button.update(button_color='black')
-    sticker2_button.update(button_color='gold') if current_sticker==sticker_image_2 else sticker2_button.update(button_color='black')
-    sticker3_button.update(button_color='gold') if current_sticker==sticker_image_3 else sticker3_button.update(button_color='black')
-    sticker4_button.update(button_color='gold') if current_sticker==sticker_image_4 else sticker4_button.update(button_color='black')
-    sticker5_button.update(button_color='gold') if current_sticker==sticker_image_5 else sticker5_button.update(button_color='black')
-    sticker6_button.update(button_color='gold') if current_sticker==sticker_image_6 else sticker6_button.update(button_color='black')
-    sticker7_button.update(button_color='gold') if current_sticker==sticker_image_7 else sticker7_button.update(button_color='black')
-    sticker8_button.update(button_color='gold') if current_sticker==sticker_image_8 else sticker8_button.update(button_color='black')
-    sticker9_button.update(button_color='gold') if current_sticker==sticker_image_9 else sticker9_button.update(button_color='black')
-    sticker10_button.update(button_color='gold') if current_sticker==sticker_image_10 else sticker10_button.update(button_color='black')    
+    
+    # Atualiza a cor do botão de gravação
+    record_button.update(button_color='red' if record else 'white')
+    
+    # Atualiza a cor do botão de flip horizontal
+    flipx_button.update(button_color='gold' if flipx else 'white')
+    
+    # Atualiza a cor do botão de flip vertical
+    flipy_button.update(button_color='gold' if flipy else 'white')
+    
+    # Atualiza a cor dos botões de filtro
+    for i, button in enumerate(filter_buttons):
+        button.update(button_color='gold' if current_filter == i else 'black')
+    
+    # Atualiza a cor dos botões de sticker
+    sticker_images = [
+        sticker_image_0, sticker_image_1, sticker_image_2, sticker_image_3,
+        sticker_image_4, sticker_image_5, sticker_image_6, sticker_image_7,
+        sticker_image_8, sticker_image_9, sticker_image_10
+    ]
+    for i, button in enumerate(sticker_buttons):
+        button.update(button_color='gold' if current_sticker == sticker_images[i] else 'black')
 
 def apply_filter(filter, image):
+    # Cria uma cópia da imagem original para não modificar a original
     image = image.copy()
 
+    # Filtro 1: Aumenta a intensidade do canal vermelho
     if filter == 1:
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         image = np.array(image, dtype=np.float64)
@@ -72,7 +58,8 @@ def apply_filter(filter, image):
         image = np.array(image, dtype=np.uint8)
         image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
 
-    if filter == 2:
+    # Filtro 2: Aumenta a intensidade do canal verde
+    elif filter == 2:
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         image = np.array(image, dtype=np.float64)
         image = cv.transform(image, np.matrix([[0, 0.90822864, 0.008192], [0, 1, 0], [0, 0, 1]]))
@@ -80,7 +67,8 @@ def apply_filter(filter, image):
         image = np.array(image, dtype=np.uint8)
         image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
 
-    if filter == 3:
+    # Filtro 3: Aumenta a intensidade do canal azul
+    elif filter == 3:
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         image = np.array(image, dtype=np.float64)
         image = cv.transform(image, np.matrix([[1, 0, 0], [0, 1, 0], [-0.15773032,  1.19465634, 0]]))
@@ -88,24 +76,28 @@ def apply_filter(filter, image):
         image = np.array(image, dtype=np.uint8)
         image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
 
-    if filter == 4:
+    # Filtro 4: Inverte as cores da imagem (efeito negativo)
+    elif filter == 4:
         for i in range(image.shape[0]):
             for j in range(image.shape[1]):
                 image[i, j, 0] = image[i, j, 0] ^ 255
                 image[i, j, 1] = image[i, j, 1] ^ 255
                 image[i, j, 2] = image[i, j, 2] ^ 255
 
-    if filter == 5:
+    # Filtro 5: Converte a imagem para preto e branco com limiarização
+    elif filter == 5:
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         for i in range(image.shape[0]):
             for j in range(image.shape[1]):
                 image[i, j] = 0 if image[i, j] < 120 else 255
         image = cv.cvtColor(image, cv.COLOR_GRAY2BGR)
         
-    if filter == 6:
-        image = cv.Canny(image,50,150)
+    # Filtro 6: Aplica detecção de bordas usando o algoritmo Canny
+    elif filter == 6:
+        image = cv.Canny(image, 50, 150)
 
-    if filter == 7:
+    # Filtro 7: Converte a imagem para tons de cinza
+    elif filter == 7:
         for i in range(image.shape[0]):
             for j in range(image.shape[1]):
                 avg = (
@@ -117,20 +109,23 @@ def apply_filter(filter, image):
                 image[i, j, 1] = avg
                 image[i, j, 2] = avg
 
-    if filter == 8:
-        kernel = np.ones((3,3),np.uint8)
-        image = cv.dilate(image,kernel,iterations=2)
+    # Filtro 8: Aplica dilatação à imagem
+    elif filter == 8:
+        kernel = np.ones((3, 3), np.uint8)
+        image = cv.dilate(image, kernel, iterations=2)
 
-    if filter == 9:
-        kernel = np.ones((3,3),np.uint8)
-        image = cv.erode(image,kernel,iterations=2)
+    # Filtro 9: Aplica erosão à imagem
+    elif filter == 9:
+        kernel = np.ones((3, 3), np.uint8)
+        image = cv.erode(image, kernel, iterations=2)
 
-    if filter == 10:
+    # Filtro 10: Aplica um efeito sépia à imagem
+    elif filter == 10:
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         image = np.array(image, dtype=np.float64)
         image = cv.transform(image, np.matrix([[0.393, 0.769, 0.189],
-                                           [0.349, 0.686, 0.168],
-                                           [0.272, 0.534, 0.131]]))
+                                               [0.349, 0.686, 0.168],
+                                               [0.272, 0.534, 0.131]]))
         image[np.where(image > 255)] = 255
         image = np.array(image, dtype=np.uint8)
         image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
@@ -139,52 +134,61 @@ def apply_filter(filter, image):
 
 def update_image(image, blur, contrast, brightness, sharpen, emboss, contour, flipx, flipy, rotate, filter):
     global img, bio
-    img = image.copy()
-    h, w = img.shape[:2]
-    c = (w/2, h/2)
+    img = image.copy()  # Cria uma cópia da imagem original para não modificá-la diretamente
+    h, w = img.shape[:2]  # Obtém a altura e a largura da imagem
+    c = (w / 2, h / 2)  # Define o centro da imagem para rotações
 
-    blur = int(blur)+1
-    img = cv.blur(img, (blur,blur))
+    # Aplica desfoque à imagem
+    blur = int(blur) + 1
+    img = cv.blur(img, (blur, blur))
 
+    # Aplica rotação à imagem
     rotation_matrix = cv.getRotationMatrix2D(center=c, angle=rotate, scale=1)
-    img = cv.warpAffine(src=img, M=rotation_matrix, dsize=(w,h))
+    img = cv.warpAffine(src=img, M=rotation_matrix, dsize=(w, h))
 
-    alpha = 1.0 + (contrast*0.02)
+    # Ajusta o contraste e o brilho da imagem
+    alpha = 1.0 + (contrast * 0.02)
     beta = brightness
     img = cv.convertScaleAbs(img, alpha=alpha, beta=beta)
 
+    # Aplica nitidez à imagem
     if sharpen:
-        sharpen = sharpen+4
         kernel = np.array([[0, -1, 0],
-                            [-1, 5, -1],
-                            [0, -1, 0]])
+                           [-1, 5, -1],
+                           [0, -1, 0]])
         img = cv.filter2D(img, -1, kernel)
 
+    # Aplica efeito de relevo à imagem
     if emboss:
         kernel = np.array([[-1, 0, 0],
-                            [0, 0, 0],
-                            [0, 0, 1]])
+                           [0, 0, 0],
+                           [0, 0, 1]])
         img = cv.filter2D(img, -1, kernel)
 
+    # Aplica contorno à imagem
     if contour:
         kernel = np.array([[-1, -1, -1],
-                            [-1, 8, -1],
-                            [-1, -1, -1]])
+                           [-1, 8, -1],
+                           [-1, -1, -1]])
         img = cv.filter2D(img, -1, kernel)
 
+    # Aplica flip horizontal à imagem
     if flipx:
         img = cv.flip(img, 1)
 
+    # Aplica flip vertical à imagem
     if flipy:
         img = cv.flip(img, 0)
 
+    # Aplica o filtro selecionado à imagem
     img = apply_filter(filter, img)
 
+    # Codifica a imagem em formato PNG e armazena em um buffer
     _, buf = cv.imencode('.png', img)
     bio = BytesIO(buf)
 
+    # Atualiza a imagem na interface gráfica
     window['-IMAGE-'].update(data=bio.getvalue())
-# ---------------------------------------------------- #
 
 # DIRECTORIES #
 
