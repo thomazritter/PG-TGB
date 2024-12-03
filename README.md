@@ -1,6 +1,10 @@
-# Image Editor - Trabalho GB (Processamento Gráfico)
+# Image Editor - Trabalho GB (Processamento Gráfico) - Carlos Souza & Thomaz Ritter
 
 Este projeto é um editor gráfico desenvolvido como parte do Trabalho de Grau B na disciplina de Processamento Gráfico. Ele implementa funcionalidades inspiradas nos stories do Instagram, permitindo aos usuários editar imagens e vídeos por meio de filtros, stickers e outras manipulações gráficas.
+
+### Vídeo apresentando o projeto
+
+- [Link pro vídeo](https://www.youtube.com/watch?v=lTeb3xT0pG4)
 
 ## Funcionalidades Principais
 
