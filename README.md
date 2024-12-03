@@ -4,7 +4,7 @@ Este projeto é um editor gráfico desenvolvido como parte do Trabalho de Grau B
 
 ### Vídeo apresentando o projeto
 
-- [Link pro vídeo](https://www.youtube.com/watch?v=lTeb3xT0pG4)
+- [Link pro vídeo](https://drive.google.com/file/d/12Y0ps3nP-y2wQusvpwG8_pSAFlXZXUfO/view?usp=sharing)
 
 ## Funcionalidades Principais
 
